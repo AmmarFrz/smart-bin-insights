@@ -230,11 +230,11 @@ void loop() {
       Serial.println("[SENSOR] Sensor HC-SR04 tidak terdeteksi!");
       Serial.println("[MOCK] Mengaktifkan Mode Simulasi Otomatis (Uji Coba Sebelum Dirangkai)...");
       
-      // Simulasikan tong sampah yang terisi perlahan (tinggi awal 50 cm, berkurang 5 cm per siklus)
-      static float simulatedDistance = 50.0f;
-      simulatedDistance -= 5.0f;
-      if (simulatedDistance < 5.0f) {
-        simulatedDistance = 50.0f; // Reset kembali ke kosong jika sudah penuh
+      // Simulasikan tong sampah yang terisi perlahan (tinggi awal 15 cm, berkurang 1.5 cm per siklus)
+      static float simulatedDistance = 15.0f;
+      simulatedDistance -= 1.5f;
+      if (simulatedDistance < 2.0f) {
+        simulatedDistance = 15.0f; // Reset kembali ke kosong jika sudah penuh
       }
       d = simulatedDistance;
     }
