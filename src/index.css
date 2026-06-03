@@ -297,3 +297,16 @@ input[type=number] {
 .leaflet-bottom {
   z-index: 10 !important;
 }
+
+
+/* Fix Leaflet z-index issues on mobile */
+.leaflet-container {
+  z-index: 10 !important;
+}
+.leaflet-pane {
+  z-index: 10 !important;
+}
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 10 !important;
+}
