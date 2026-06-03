@@ -79,7 +79,7 @@ export default function AboutPage() {
     },
     {
       title: "Pemberdayaan Teknologi Hijau",
-      value: "Eko-Transparansi Sleman",
+      value: "Eco",
       description: "Menampilkan konversi penyerapan gas emisi karbon ke jumlah ekuivalensi pohon yang terselamatkan secara ilmiah.",
       icon: TreePine,
       color: "from-emerald-500/10 to-green-500/5 border-emerald-500/20 text-emerald-400"
@@ -165,19 +165,19 @@ export default function AboutPage() {
           <div className="p-4 rounded-lg bg-white/[0.01] border border-white/[0.04] space-y-2">
             <p className="font-semibold text-emerald-400">1. Node Sensor Lapangan (IoT)</p>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              Mikrokontroler **ESP32** mengaktifkan sensor ultrasonik **HC-SR04** untuk mengukur ketinggian tumpukan sampah setiap interval waktu tertentu, memfilter noise secara lokal, dan mengirimkan datanya lewat jaringan internet menggunakan REST API HTTPS POST.
+              Mikrokontroler ESP32 mengaktifkan sensor ultrasonik HC-SR04 untuk mengukur ketinggian tumpukan sampah setiap interval waktu tertentu, memfilter noise secara lokal, dan mengirimkan datanya lewat jaringan internet menggunakan REST API HTTPS POST.
             </p>
           </div>
           <div className="p-4 rounded-lg bg-white/[0.01] border border-white/[0.04] space-y-2">
             <p className="font-semibold text-blue-400">2. Supabase Serverless & Database</p>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              Endpoint **Supabase Edge Function** menerima kiriman data sensor, memvalidasi kunci keamanan (*x-api-key*), melakukan pembaruan status tempat sampah di PostgreSQL database, dan menyebarkan event data baru secara instan via kanal WebSocket.
+              Endpoint Supabase Edge Function menerima kiriman data sensor, memvalidasi kunci keamanan (x-api-key), melakukan pembaruan status tempat sampah di PostgreSQL database, dan menyebarkan event data baru secara instan via kanal WebSocket.
             </p>
           </div>
           <div className="p-4 rounded-lg bg-white/[0.01] border border-white/[0.04] space-y-2">
             <p className="font-semibold text-purple-400">3. React Dashboard (Front-End)</p>
             <p className="text-[11px] text-muted-foreground leading-relaxed">
-              Aplikasi web **React Vite** menerima event database secara real-time. Peta Leaflet akan langsung memperbarui rute logistik optimal armada pengangkut, memicu sirine suara darurat jika penuh, serta menghitung kontribusi ramah lingkungan dinamis.
+              Aplikasi web React Vite menerima event database secara real-time. Peta Leaflet akan langsung memperbarui rute logistik optimal armada pengangkut, memicu sirine suara darurat jika penuh, serta menghitung kontribusi ramah lingkungan dinamis.
             </p>
           </div>
         </div>
