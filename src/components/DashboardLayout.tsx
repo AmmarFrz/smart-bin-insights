@@ -29,7 +29,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 flex items-center justify-between border-b border-white/[0.06] bg-card/40 backdrop-blur-xl px-4 sticky top-0 z-10">
+          <header className="h-14 flex items-center justify-between border-b border-white/[0.06] bg-card/40 backdrop-blur-xl px-4 sticky top-0 z-50">
             <div className="flex items-center gap-3">
               <SidebarTrigger />
               <div className="hidden sm:flex items-center gap-2">
