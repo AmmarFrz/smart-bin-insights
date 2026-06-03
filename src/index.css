@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -284,5 +284,16 @@ input[type=number] {
 .leaflet-popup-close-button {
   color: hsl(var(--muted-foreground)) !important;
 }
-. l e a f l e t - c o n t a i n e r   {   z - i n d e x :   0   ! i m p o r t a n t ;   }  
- 
+. l e a f
+
+/* Fix Leaflet z-index issues on mobile */
+.leaflet-container {
+  z-index: 10 !important;
+}
+.leaflet-pane {
+  z-index: 10 !important;
+}
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 10 !important;
+}
