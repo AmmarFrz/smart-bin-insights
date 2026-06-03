@@ -124,7 +124,17 @@
 
 @layer utilities {
   .glass-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border shadow-lg transition-all duration-300;
+    @apply bg-card/90 backdrop-blur-xl transition-all duration-300;
+    border: 1px solid hsla(220, 14%, 90%, 0.6);
+    box-shadow: 
+      0 4px 24px -6px hsla(220, 20%, 40%, 0.08),
+      inset 0 1px 0 0 hsla(0, 0%, 100%, 0.6);
+  }
+  .glass-card:hover {
+    box-shadow: 
+      0 12px 32px -8px hsla(220, 20%, 40%, 0.12),
+      inset 0 1px 0 0 hsla(0, 0%, 100%, 0.8);
+    border-color: hsla(220, 14%, 85%, 0.8);
   }
   .dark .glass-card {
     @apply bg-card/60 border-white/[0.06];
