@@ -184,17 +184,17 @@ export default function AnalyticsPage() {
                     <stop offset="95%" stopColor="hsl(155, 70%, 45%)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsla(220, 14%, 25%, 0.6)" />
-                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" domain={[0, 100]} unit="%" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" domain={[0, 100]} unit="%" />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 10,
-                    border: "1px solid hsl(220, 14%, 20%)",
-                    background: "hsl(220, 18%, 11%)",
-                    color: "hsl(210, 20%, 90%)",
+                    border: "1px solid hsl(var(--border))",
+                    background: "hsl(var(--card))",
+                    color: "hsl(var(--foreground))",
                     fontSize: 12,
-                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
+                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                   }}
                 />
                 <Area type="monotone" dataKey="avgFill" stroke="hsl(155, 70%, 45%)" fill="url(#dailyFill)" strokeWidth={2.5} name="Avg Fill %" />
@@ -232,21 +232,21 @@ export default function AnalyticsPage() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={weeklyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsla(220, 14%, 25%, 0.6)" />
-                <XAxis dataKey="week" tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="week" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 10,
-                    border: "1px solid hsl(220, 14%, 20%)",
-                    background: "hsl(220, 18%, 11%)",
-                    color: "hsl(210, 20%, 90%)",
+                    border: "1px solid hsl(var(--border))",
+                    background: "hsl(var(--card))",
+                    color: "hsl(var(--foreground))",
                     fontSize: 12,
-                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
+                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                   }}
                 />
-                <Line type="monotone" dataKey="avgFill" stroke="hsl(155, 70%, 45%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(220, 18%, 11%)" }} name="Avg Fill %" />
-                <Line type="monotone" dataKey="totalCollections" stroke="hsl(205, 85%, 55%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(220, 18%, 11%)" }} name="Collections" />
+                <Line type="monotone" dataKey="avgFill" stroke="hsl(155, 70%, 45%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(var(--card))" }} name="Avg Fill %" />
+                <Line type="monotone" dataKey="totalCollections" stroke="hsl(205, 85%, 55%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(var(--card))" }} name="Collections" />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -257,17 +257,17 @@ export default function AnalyticsPage() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsla(220, 14%, 25%, 0.6)" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 10,
-                    border: "1px solid hsl(220, 14%, 20%)",
-                    background: "hsl(220, 18%, 11%)",
-                    color: "hsl(210, 20%, 90%)",
+                    border: "1px solid hsl(var(--border))",
+                    background: "hsl(var(--card))",
+                    color: "hsl(var(--foreground))",
                     fontSize: 12,
-                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
+                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                   }}
                 />
                 <Bar dataKey="totalWaste" fill="hsl(155, 70%, 45%)" radius={[6, 6, 0, 0]} name="Total Waste (kg)" />
@@ -283,17 +283,17 @@ export default function AnalyticsPage() {
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={hourlyFillData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsla(220, 14%, 25%, 0.6)" />
-              <XAxis dataKey="hour" tick={{ fontSize: 10, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" interval={2} />
-              <YAxis tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" domain={[0, 100]} unit="%" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="hour" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" interval={2} />
+              <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" domain={[0, 100]} unit="%" />
               <Tooltip
                 contentStyle={{
                   borderRadius: 10,
-                  border: "1px solid hsl(220, 14%, 20%)",
-                  background: "hsl(220, 18%, 11%)",
-                  color: "hsl(210, 20%, 90%)",
+                  border: "1px solid hsl(var(--border))",
+                  background: "hsl(var(--card))",
+                  color: "hsl(var(--foreground))",
                   fontSize: 12,
-                  boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
+                  boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                 }}
               />
               <Line type="monotone" dataKey="bin1" stroke="hsl(155, 70%, 45%)" strokeWidth={2.5} dot={false} name="BIN-001" />

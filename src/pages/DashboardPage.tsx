@@ -187,12 +187,17 @@ export default function DashboardPage() {
                   ? "bg-amber-400 shadow-amber-400/50"
                   : "bg-red-400 shadow-red-400/50 animate-pulse";
               const borderClass = health.severity === "normal"
-                ? "border-emerald-500/10 hover:border-emerald-500/25"
+                ? "border-emerald-500/20 hover:border-emerald-500/40"
                 : health.severity === "warning"
-                  ? "border-amber-500/15 hover:border-amber-500/30"
-                  : "border-red-500/15 hover:border-red-500/30";
+                  ? "border-amber-500/20 hover:border-amber-500/40"
+                  : "border-red-500/20 hover:border-red-500/40";
+              const bgClass = health.severity === "normal"
+                ? "bg-emerald-50 dark:bg-emerald-500/5"
+                : health.severity === "warning"
+                  ? "bg-amber-50 dark:bg-amber-500/5"
+                  : "bg-red-50 dark:bg-red-500/5";
               return (
-                <div key={bin.id} className={`flex items-center gap-3 p-3 rounded-lg bg-white/[0.02] border ${borderClass} transition-all duration-200 hover:bg-white/[0.04]`}>
+                <div key={bin.id} className={`flex items-center gap-3 p-3 rounded-lg ${bgClass} border ${borderClass} transition-all duration-200 hover:shadow-sm`}>
                   <div className={`h-2.5 w-2.5 rounded-full flex-shrink-0 shadow-sm ${dotClass}`} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
@@ -223,17 +228,17 @@ export default function DashboardPage() {
                     <stop offset="95%" stopColor="hsl(155, 70%, 50%)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsla(220, 14%, 25%, 0.6)" />
-                <XAxis dataKey="time" tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" domain={[0, 100]} unit="%" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="time" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" domain={[0, 100]} unit="%" />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 10,
-                    border: "1px solid hsl(220, 14%, 20%)",
-                    background: "hsl(220, 18%, 11%)",
-                    color: "hsl(210, 20%, 90%)",
+                    border: "1px solid hsl(var(--border))",
+                    background: "hsl(var(--card))",
+                    color: "hsl(var(--foreground))",
                     fontSize: 12,
-                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
+                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                   }}
                 />
                 <Area type="monotone" dataKey="avg" stroke="hsl(155, 70%, 50%)" fill="url(#fillGrad)" strokeWidth={2.5} dot={false} />
@@ -257,9 +262,9 @@ export default function DashboardPage() {
             )}
             {alerts.slice(0, 4).map(alert => (
               <div key={alert.id} className={`flex items-start gap-3 rounded-lg p-3 text-xs transition-all duration-200 hover:translate-x-1 ${
-                alert.type === "critical" ? "bg-red-500/10 border border-red-500/15" :
-                alert.type === "warning" ? "bg-amber-500/10 border border-amber-500/15" :
-                "bg-white/[0.03] border border-white/[0.06]"
+                alert.type === "critical" ? "bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/15" :
+                alert.type === "warning" ? "bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/15" :
+                "bg-muted/50 border border-border"
               }`}>
                 <div className={`mt-0.5 h-2 w-2 rounded-full flex-shrink-0 shadow-sm ${
                   alert.type === "critical" ? "bg-red-400 shadow-red-400/50 animate-pulse-dot" :
@@ -281,17 +286,17 @@ export default function DashboardPage() {
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={collectionsByDay}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsla(220, 14%, 25%, 0.6)" />
-                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(215, 14%, 50%)" }} stroke="hsl(220, 14%, 22%)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
+                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
                 <Tooltip
                   contentStyle={{
                     borderRadius: 10,
-                    border: "1px solid hsl(220, 14%, 20%)",
-                    background: "hsl(220, 18%, 11%)",
-                    color: "hsl(210, 20%, 90%)",
+                    border: "1px solid hsl(var(--border))",
+                    background: "hsl(var(--card))",
+                    color: "hsl(var(--foreground))",
                     fontSize: 12,
-                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
+                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                   }}
                 />
                 <Bar dataKey="collections" fill="hsl(205, 85%, 55%)" radius={[6, 6, 0, 0]} />
@@ -314,13 +319,13 @@ export default function DashboardPage() {
             {bins.slice(0, 6).map(bin => {
               const prediction = getFillPredictionDetail(bin.current_fill_percentage);
               const predictionColorClass = prediction.color === "red"
-                ? "text-red-400 bg-red-500/10 border-red-500/20"
+                ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20"
                 : prediction.color === "amber"
-                  ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
-                  : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
+                  ? "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20"
+                  : "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20";
               const pulseClass = prediction.urgency === "critical" || prediction.urgency === "urgent" ? "animate-pulse" : "";
               return (
-                <div key={bin.id} className="flex flex-col gap-1.5 p-3 rounded-lg hover:bg-white/[0.03] transition-all duration-200 border border-transparent hover:border-white/[0.06]">
+                <div key={bin.id} className="flex flex-col gap-1.5 p-3 rounded-lg hover:bg-muted/50 transition-all duration-200 border border-transparent hover:border-border">
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-mono text-muted-foreground w-20 truncate">{bin.bin_code}</span>
                     <div className="flex-1"><FillGauge percentage={bin.is_maintenance ? 0 : bin.current_fill_percentage} /></div>
