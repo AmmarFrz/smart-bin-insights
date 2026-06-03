@@ -79,7 +79,7 @@ export default function AboutPage() {
     },
     {
       title: "Pemberdayaan Teknologi Hijau",
-      value: "Eco",
+      value: "Eco-Transparansi Sleman",
       description: "Menampilkan konversi penyerapan gas emisi karbon ke jumlah ekuivalensi pohon yang terselamatkan secara ilmiah.",
       icon: TreePine,
       color: "from-emerald-500/10 to-green-500/5 border-emerald-500/20 text-emerald-400"
