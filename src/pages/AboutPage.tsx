@@ -98,10 +98,10 @@ export default function AboutPage() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <Info className="h-6 w-6 text-emerald-400" />
-          <h1 className="text-2xl font-bold tracking-tight">EcoPhora Info & Keunggulan</h1>
+          <h1 className="text-2xl font-bold tracking-tight">EcoPhora Info dan Keunggulan</h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          Platform Sistem Pengelolaan Sampah Cerdas berbasis Internet of Things (IoT) & Analisis Rute Teroptimasi.
+          Sistem Pengelolaan Sampah Cerdas berbasis Internet of Things (IoT) dan Analisis Rute Teroptimasi.
         </p>
       </div>
 
