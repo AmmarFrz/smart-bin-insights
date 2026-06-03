@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, Trash2, Cpu, Bell, BarChart3, Settings, Map, Info, Moon, Sun
+  LayoutDashboard, Trash2, Cpu, Bell, BarChart3, Settings, Map, Info
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { EcoPhoraLogo } from "@/components/EcoPhoraLogo";
@@ -8,9 +8,8 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
-  SidebarHeader, SidebarFooter, useSidebar,
+  SidebarHeader, useSidebar,
 } from "@/components/ui/sidebar";
-import { useTheme } from "next-themes";
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -27,7 +26,6 @@ export function AppSidebar() {
   const collapsed = state === "collapsed";
   const location = useLocation();
   const { isAdmin } = useAuth();
-  const { theme, setTheme } = useTheme();
   const isActive = (path: string) => location.pathname === path;
 
   return (
@@ -81,15 +79,6 @@ export function AppSidebar() {
           </SidebarGroup>
         )}
       </SidebarContent>
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
-        <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="flex items-center gap-3 w-full px-2 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors"
-        >
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          {!collapsed && <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>}
-        </button>
-      </SidebarFooter>
     </Sidebar>
   );
 }
