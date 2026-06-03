@@ -19,6 +19,7 @@ export interface BinRow {
   longitude: number | null;
   created_at: string;
   updated_at: string;
+  is_maintenance: boolean;
   devices?: { device_name: string; esp_id: string; online: boolean } | null;
 }
 

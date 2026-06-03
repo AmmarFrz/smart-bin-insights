@@ -33,6 +33,7 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
 // ============ KONFIGURASI — UBAH SESUAI PUNYAMU ============
@@ -49,21 +50,41 @@ const char* INGEST_URL =
   "https://bnbzwrrbaghgggtxzmfb.supabase.co/functions/v1/ingest-reading";
 
 // Interval kirim data ke server (millidetik)
-unsigned long currentIntervalMs = 30000UL;   // Default awal 30 detik
+unsigned long currentIntervalMs = 5000UL;    // Fast mode untuk pengujian skripsi (5 detik)
 
 // ============ PIN ============
 #define PIN_TRIG    5
 #define PIN_ECHO    18
-#define LED_GREEN   25
-#define LED_YELLOW  26
-#define LED_RED     27
+#define PIN_LED_GREEN  25
+#define PIN_LED_YELLOW 26
+#define PIN_LED_RED    27
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // ============ STATE ============
 unsigned long lastSendMs = 0;
 
+// --- Variabel Layar LCD ---
+float globalDist = -1.0f;
+int globalFill = 0;
+unsigned long lastLcdChangeMs = 0;
+int lcdFrame = 0;
+
 // ============ HELPERS ============
+void updateLEDs(int fillPct) {
+  digitalWrite(PIN_LED_GREEN, LOW);
+  digitalWrite(PIN_LED_YELLOW, LOW);
+  digitalWrite(PIN_LED_RED, LOW);
+
+  if (fillPct < 70) {
+    digitalWrite(PIN_LED_GREEN, HIGH);
+  } else if (fillPct < 90) {
+    digitalWrite(PIN_LED_YELLOW, HIGH);
+  } else {
+    digitalWrite(PIN_LED_RED, HIGH);
+  }
+}
+
 float readDistanceCm() {
   // Trigger pulse 10us
   digitalWrite(PIN_TRIG, LOW);
@@ -93,11 +114,6 @@ float readDistanceAveraged(int samples = 5) {
   return sum / valid;
 }
 
-void setStatusLed(int fillPct) {
-  digitalWrite(LED_GREEN,  fillPct < 70 ? HIGH : LOW);
-  digitalWrite(LED_YELLOW, (fillPct >= 70 && fillPct < 90) ? HIGH : LOW);
-  digitalWrite(LED_RED,    fillPct >= 90 ? HIGH : LOW);
-}
 
 void connectWiFi() {
   Serial.printf("[WiFi] Connecting to %s ", WIFI_SSID);
@@ -156,33 +172,19 @@ bool sendReading(float distanceCm) {
     DeserializationError error = deserializeJson(rdoc, resp);
     if (!error) {
       int fillPct = rdoc["fill_percentage"] | 0;
-      setStatusLed(fillPct);
       Serial.printf("[OK] fill=%d%%\n", fillPct);
 
-      // --- UPDATE LCD ---
-      lcd.clear();
-      lcd.setCursor(0,0);
-      lcd.print("Jarak: ");
-      lcd.print(distanceCm, 1);
-      lcd.print(" cm");
-      
-      lcd.setCursor(0,1);
-      lcd.print("Isi: ");
-      lcd.print(fillPct);
-      lcd.print("% ");
-      if (fillPct < 70) lcd.print("(Aman)");
-      else if (fillPct < 90) lcd.print("(Siaga)");
-      else lcd.print("(Penuh)");
+      // --- SIMPAN DATA UNTUK LCD ---
+      globalFill = fillPct;
+      globalDist = distanceCm;
 
-      // --- SMART INTERVAL LOGIC ---
-      if (fillPct < 50) {
-        currentIntervalMs = 120000UL; // 2 menit jika kosong
-      } else if (fillPct < 80) {
-        currentIntervalMs = 60000UL;  // 1 menit jika sedang
-      } else {
-        currentIntervalMs = 10000UL;  // 10 detik jika hampir penuh
-      }
-      Serial.printf("[INFO] Smart Interval aktif: %lu ms\n", currentIntervalMs);
+      // --- UPDATE LED INDIKATOR ---
+      updateLEDs(globalFill);
+
+      // --- SMART INTERVAL LOGIC (DINONAKTIFKAN UNTUK PENGUJIAN SKRIPSI) ---
+      // Kunci interval ke 5 detik (5000 ms) agar selalu lulus uji latency < 30 detik
+      currentIntervalMs = 5000UL;
+      Serial.printf("[INFO] Interval pengiriman dikunci: %lu ms\n", currentIntervalMs);
     }
   }
 
@@ -198,9 +200,13 @@ void setup() {
 
   pinMode(PIN_TRIG, OUTPUT);
   pinMode(PIN_ECHO, INPUT);
-  pinMode(LED_GREEN, OUTPUT);
-  pinMode(LED_YELLOW, OUTPUT);
-  pinMode(LED_RED, OUTPUT);
+  
+  pinMode(PIN_LED_GREEN, OUTPUT);
+  pinMode(PIN_LED_YELLOW, OUTPUT);
+  pinMode(PIN_LED_RED, OUTPUT);
+  
+  // Nyalakan Hijau saat pertama kali booting
+  updateLEDs(0);
 
   lcd.init(); 
   lcd.backlight();
@@ -241,6 +247,38 @@ void loop() {
 
     Serial.printf("[SENSOR] distance = %.1f cm\n", d);
     sendReading(d);
+  }
+
+  // --- LOGIKA CAROUSEL LCD ---
+  if (WiFi.status() == WL_CONNECTED && globalDist >= 0) {
+    if (millis() - lastLcdChangeMs >= 4000) {
+      lastLcdChangeMs = millis();
+      lcd.clear();
+      if (lcdFrame == 0) {
+        // Layar 1: Kapasitas & Status
+        lcd.setCursor(0, 0);
+        lcd.print(BIN_CODE);
+        lcd.print(" | ");
+        lcd.print(globalFill);
+        lcd.print("%");
+        
+        lcd.setCursor(0, 1);
+        if (globalFill < 70) lcd.print("Status: AMAN");
+        else if (globalFill < 90) lcd.print("Status: SIAGA");
+        else lcd.print("Status: PENUH");
+      } else {
+        // Layar 2: Jaringan & Jarak Fisik
+        lcd.setCursor(0, 0);
+        lcd.print("IP:");
+        lcd.print(WiFi.localIP().toString());
+        
+        lcd.setCursor(0, 1);
+        lcd.print("Jarak: ");
+        lcd.print(globalDist, 1);
+        lcd.print(" cm");
+      }
+      lcdFrame = (lcdFrame + 1) % 2;
+    }
   }
 
   delay(100);

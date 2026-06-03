@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2, MapPin } from "lucide-react";
@@ -19,6 +20,7 @@ const schema = z.object({
   threshold_warning: z.coerce.number().int().min(0).max(100),
   threshold_full: z.coerce.number().int().min(0).max(100),
   device_id: z.string().nullable(),
+  is_maintenance: z.boolean().default(false),
   latitude: z.number().min(-90).max(90).nullable(),
   longitude: z.number().min(-180).max(180).nullable(),
 }).refine((d) => d.threshold_warning < d.threshold_full, {
@@ -42,6 +44,7 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
   const [form, setForm] = useState({
     bin_code: "", location: "", height_cm: 30,
     threshold_warning: 70, threshold_full: 90, device_id: "none" as string,
+    is_maintenance: false,
     latitude: null as number | null, longitude: null as number | null,
   });
 
@@ -51,13 +54,14 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
         bin_code: bin.bin_code, location: bin.location,
         height_cm: bin.height_cm, threshold_warning: bin.threshold_warning,
         threshold_full: bin.threshold_full, device_id: bin.device_id ?? "none",
+        is_maintenance: bin.is_maintenance ?? false,
         latitude: bin.latitude !== null ? Number(bin.latitude) : null,
         longitude: bin.longitude !== null ? Number(bin.longitude) : null,
       });
     } else {
       setForm({
         bin_code: "", location: "", height_cm: 30, threshold_warning: 70, threshold_full: 90,
-        device_id: "none", latitude: null, longitude: null,
+        device_id: "none", is_maintenance: false, latitude: null, longitude: null,
       });
     }
   }, [bin, open]);
@@ -79,6 +83,7 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
       threshold_warning: d.threshold_warning,
       threshold_full: d.threshold_full,
       device_id: d.device_id,
+      is_maintenance: d.is_maintenance,
       latitude: d.latitude,
       longitude: d.longitude,
     };
@@ -173,6 +178,18 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
               <Label>Full %</Label>
               <Input type="number" value={form.threshold_full} onChange={(e) => setForm({ ...form, threshold_full: Number(e.target.value) })} />
             </div>
+          </div>
+
+          <div className="flex items-center space-x-3 pt-2">
+            <Switch
+              id="maintenance-mode"
+              checked={form.is_maintenance}
+              onCheckedChange={(c) => setForm({ ...form, is_maintenance: c })}
+            />
+            <Label htmlFor="maintenance-mode" className="flex flex-col gap-1 cursor-pointer">
+              <span>Maintenance Mode</span>
+              <span className="font-normal text-xs text-muted-foreground">Temporarily disable warnings for this bin while it's being repaired.</span>
+            </Label>
           </div>
 
           <DialogFooter>

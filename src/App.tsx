@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { ThemeProvider } from "@/components/theme-provider";
 import AuthPage from "@/pages/AuthPage";
 import DashboardPage from "@/pages/DashboardPage";
 import BinsPage from "@/pages/BinsPage";
@@ -14,14 +15,16 @@ import DevicesPage from "@/pages/DevicesPage";
 import AlertsPage from "@/pages/AlertsPage";
 import AnalyticsPage from "@/pages/AnalyticsPage";
 import AdminPage from "@/pages/AdminPage";
+import AboutPage from "@/pages/AboutPage";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <TooltipProvider>
+        <Toaster />
       <Sonner position="top-right" richColors />
       <BrowserRouter>
         <AuthProvider>
@@ -45,6 +48,9 @@ const App = () => (
             <Route path="/analytics" element={
               <ProtectedRoute><DashboardLayout><AnalyticsPage /></DashboardLayout></ProtectedRoute>
             } />
+            <Route path="/about" element={
+              <ProtectedRoute><DashboardLayout><AboutPage /></DashboardLayout></ProtectedRoute>
+            } />
             <Route path="/admin" element={
               <ProtectedRoute requireAdmin><DashboardLayout><AdminPage /></DashboardLayout></ProtectedRoute>
             } />
@@ -53,6 +59,7 @@ const App = () => (
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

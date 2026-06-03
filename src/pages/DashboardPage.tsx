@@ -12,6 +12,7 @@ import { getSensorHealth } from "@/lib/anomaly-detection";
 import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
 import { toast } from "sonner";
 
 export default function DashboardPage() {
@@ -19,8 +20,11 @@ export default function DashboardPage() {
   const { devices } = useDevices();
   const { alerts, unreadCount } = useAlerts();
 
-  const fullBins = bins.filter(b => b.status === "full").length;
+  const fullBins = bins.filter(b => b.status === "full" && !b.is_maintenance).length;
   const onlineDevices = devices.filter(d => d.online).length;
+  
+  // Bins that need collection
+  const binsToCollect = bins.filter(b => !b.is_maintenance && b.current_fill_percentage >= b.threshold_warning).sort((a, b) => b.current_fill_percentage - a.current_fill_percentage);
 
   const avgFillByHour = useMemo(() => {
     // Approximate trend from current bins (placeholder until enough sensor history)
@@ -84,6 +88,28 @@ export default function DashboardPage() {
     }
   };
 
+  const exportToCSV = () => {
+    try {
+      const data = bins.map(bin => ({
+        "Kode TPS": bin.bin_code,
+        "Lokasi": bin.location,
+        "Volume (%)": bin.current_fill_percentage,
+        "Status": bin.is_maintenance ? "Maintenance" : bin.status.toUpperCase(),
+        "Terakhir Update": bin.last_reading_at ? new Date(bin.last_reading_at).toLocaleString() : "-"
+      }));
+      
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Data TPS");
+      
+      XLSX.writeFile(workbook, `Data_TPS_EcoPhora_${new Date().toISOString().split('T')[0]}.csv`);
+      toast.success("Data CSV berhasil diunduh!");
+    } catch (error) {
+      toast.error("Gagal membuat CSV");
+      console.error(error);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in-up">
@@ -91,17 +117,56 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold tracking-tight">Dashboard <span className="text-gradient">Overview</span></h1>
           <p className="text-sm text-muted-foreground mt-1">Real-time IoT waste monitoring system</p>
         </div>
-        <Button onClick={exportToPDF} className="bg-emerald-600 hover:bg-emerald-500 text-white gap-2 shadow-lg shadow-emerald-500/20">
-          <Download className="h-4 w-4" /> Cetak Laporan PDF
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={exportToCSV} variant="outline" className="gap-2 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/10">
+            <Download className="h-4 w-4" /> Unduh CSV
+          </Button>
+          <Button onClick={exportToPDF} className="bg-emerald-600 hover:bg-emerald-500 text-white gap-2 shadow-lg shadow-emerald-500/20">
+            <Download className="h-4 w-4" /> Cetak PDF
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
         <StatCard title="Total Smart Bins" value={bins.length} subtitle="Monitored bins" icon={Trash2} />
         <StatCard title="Active Devices" value={`${onlineDevices}/${devices.length}`} subtitle="ESP32 nodes online" icon={Cpu} iconClassName="bg-accent/10 group-hover:bg-accent/20 group-hover:glow-blue" />
         <StatCard title="Full Bins" value={fullBins} subtitle="Needs collection" icon={AlertTriangle} iconClassName="bg-destructive/10 group-hover:bg-destructive/20 group-hover:glow-red" />
-        <StatCard title="Unread Alerts" value={unreadCount} subtitle="Pending acknowledgement" icon={TruckIcon} iconClassName="bg-warning/10 group-hover:bg-warning/20 group-hover:glow-amber" />
+        <StatCard title="Collection Tasks" value={binsToCollect.length} subtitle="Bins warning/full" icon={TruckIcon} iconClassName="bg-warning/10 group-hover:bg-warning/20 group-hover:glow-amber" />
       </div>
+
+      {/* === SMART COLLECTION ROUTE (Daftar Tugas) === */}
+      {binsToCollect.length > 0 && (
+        <div className="glass-card rounded-xl p-5 border-warning/20 animate-fade-in-up">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <TruckIcon className="h-4 w-4 text-warning" />
+              <h3 className="text-sm font-semibold">Daftar Tugas Pengambilan (Prioritas)</h3>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-warning/10 text-warning font-medium">Smart Route</span>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {binsToCollect.map(bin => (
+              <div key={bin.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-warning/5 border border-warning/10 transition-all hover:bg-warning/10">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-full bg-warning/20 flex items-center justify-center font-bold text-warning text-xs">
+                    {bin.current_fill_percentage}%
+                  </div>
+                  <div>
+                    <span className="text-sm font-semibold">{bin.bin_code}</span>
+                    <p className="text-xs text-muted-foreground">{bin.location}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 self-end sm:self-auto">
+                  <BinStatusBadge status={bin.status} isMaintenance={bin.is_maintenance} />
+                  <Button size="sm" variant="outline" className="h-7 text-xs bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 hover:text-emerald-700 border-emerald-500/20" onClick={() => toast.success(`Ditandai selesai untuk ${bin.bin_code}`)}>
+                    Tandai Selesai
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* === SENSOR HEALTH MONITOR (Anomaly Detection) === */}
       {bins.length > 0 && (
@@ -258,8 +323,8 @@ export default function DashboardPage() {
                 <div key={bin.id} className="flex flex-col gap-1.5 p-3 rounded-lg hover:bg-white/[0.03] transition-all duration-200 border border-transparent hover:border-white/[0.06]">
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-mono text-muted-foreground w-20 truncate">{bin.bin_code}</span>
-                    <div className="flex-1"><FillGauge percentage={bin.current_fill_percentage} /></div>
-                    <BinStatusBadge status={bin.status} />
+                    <div className="flex-1"><FillGauge percentage={bin.is_maintenance ? 0 : bin.current_fill_percentage} /></div>
+                    <BinStatusBadge status={bin.status} isMaintenance={bin.is_maintenance} />
                   </div>
                   <div className="flex justify-end px-1">
                     <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${predictionColorClass} ${pulseClass}`}>
