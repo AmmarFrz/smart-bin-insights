@@ -229,13 +229,13 @@ export default function MapViewPage() {
           <p className="text-sm text-muted-foreground">Geographical overview and logistical routing of smart bins</p>
         </div>
         <div className="flex items-center gap-2 text-xs flex-wrap">
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
             <span className="h-2 w-2 rounded-full bg-emerald-500" /> Empty: {totals.empty}
           </span>
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <span className="h-2 w-2 rounded-full bg-amber-500" /> Medium: {totals.medium}
           </span>
-          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 text-red-400">
+          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400">
             <span className="h-2 w-2 rounded-full bg-red-500" /> Full: {totals.full}
           </span>
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
@@ -349,7 +349,7 @@ export default function MapViewPage() {
           </div>
 
           {/* Smart Route Control Panel */}
-          <div className="lg:col-span-1 glass-card rounded-xl p-5 flex flex-col justify-between h-full bg-card/80 backdrop-blur-xl border-white/[0.06] shadow-2xl">
+          <div className="lg:col-span-1 glass-card rounded-xl p-5 flex flex-col justify-between h-full">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Truck className="h-5 w-5 text-accent animate-bounce" />
@@ -372,15 +372,15 @@ export default function MapViewPage() {
                 <div className="space-y-4 pt-2">
                   {/* Route Stats Grid */}
                   <div className="grid grid-cols-3 gap-1.5">
-                    <div className="bg-white/[0.03] border border-white/[0.05] p-2 rounded-lg text-center">
+                    <div className="bg-muted/50 dark:bg-white/[0.03] border border-border dark:border-white/[0.05] p-2 rounded-lg text-center">
                       <p className="text-[9px] text-muted-foreground uppercase font-semibold">Jarak</p>
                       <p className="text-xs font-bold text-accent mt-0.5">{totalDistance.toFixed(1)} km</p>
                     </div>
-                    <div className="bg-white/[0.03] border border-white/[0.05] p-2 rounded-lg text-center">
+                    <div className="bg-muted/50 dark:bg-white/[0.03] border border-border dark:border-white/[0.05] p-2 rounded-lg text-center">
                       <p className="text-[9px] text-muted-foreground uppercase font-semibold">BBM Hemat</p>
                       <p className="text-xs font-bold text-blue-400 mt-0.5">{fuelSaved.toFixed(1)} L</p>
                     </div>
-                    <div className="bg-white/[0.03] border border-white/[0.05] p-2 rounded-lg text-center bg-emerald-500/5 border-emerald-500/10">
+                    <div className="bg-emerald-50 dark:bg-emerald-500/5 border border-emerald-200 dark:border-emerald-500/10 p-2 rounded-lg text-center">
                       <p className="text-[9px] text-emerald-500/80 uppercase font-semibold">CO2 Reduksi</p>
                       <p className="text-xs font-bold text-emerald-400 mt-0.5">{co2Saved.toFixed(1)} kg</p>
                     </div>
@@ -417,7 +417,7 @@ export default function MapViewPage() {
                           </div>
                           <div className="w-0.5 h-6 bg-gradient-to-b from-blue-500 to-accent/60" />
                         </div>
-                        <div className="flex-1 bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg">
+                        <div className="flex-1 bg-muted/50 dark:bg-white/[0.02] border border-border dark:border-white/[0.04] p-2 rounded-lg">
                           <p className="text-xs font-semibold text-blue-400">Mulai: Depot DLH Sleman</p>
                           <p className="text-[9px] text-muted-foreground mt-0.5">Beran, Tridadi, Sleman</p>
                         </div>
@@ -442,7 +442,7 @@ export default function MapViewPage() {
                               </div>
                               <div className="w-0.5 h-6 bg-accent/60" />
                             </div>
-                            <div className="flex-1 bg-white/[0.02] hover:bg-white/[0.04] border border-white/[0.04] p-2.5 rounded-lg flex items-center justify-between transition-colors duration-200">
+                            <div className="flex-1 bg-muted/50 dark:bg-white/[0.02] hover:bg-muted dark:hover:bg-white/[0.04] border border-border dark:border-white/[0.04] p-2.5 rounded-lg flex items-center justify-between transition-colors duration-200">
                               <div className="flex flex-col">
                                 <span className="text-xs font-semibold text-foreground">{bin.bin_code}</span>
                                 <span className="text-[9px] text-muted-foreground mt-0.5 truncate max-w-[140px]">{bin.location}</span>
@@ -468,7 +468,7 @@ export default function MapViewPage() {
                             <Truck className="h-3.5 w-3.5" />
                           </div>
                         </div>
-                        <div className="flex-1 bg-white/[0.02] border border-white/[0.04] p-2 rounded-lg">
+                        <div className="flex-1 bg-muted/50 dark:bg-white/[0.02] border border-border dark:border-white/[0.04] p-2 rounded-lg">
                           <p className="text-xs font-semibold text-blue-400">Selesai: Kembali ke Depot</p>
                           <p className="text-[9px] text-muted-foreground mt-0.5">Truk Bongkar Muatan</p>
                         </div>
@@ -481,7 +481,7 @@ export default function MapViewPage() {
             </div>
 
             {showRoute && (
-              <div className="space-y-2 pt-4 border-t border-white/[0.06]">
+              <div className="space-y-2 pt-4 border-t border-border">
                 <Button
                   onClick={sendWhatsAppDispatch}
                   className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs tracking-wide shadow-lg shadow-emerald-600/10 py-5 rounded-lg flex items-center justify-center gap-2 transition-all duration-300"
@@ -492,7 +492,7 @@ export default function MapViewPage() {
                 <Button
                   onClick={clearRoute}
                   variant="outline"
-                  className="w-full border-white/10 hover:bg-white/[0.04] text-muted-foreground hover:text-foreground text-xs rounded-lg flex items-center justify-center gap-2"
+                  className="w-full border-border hover:bg-muted text-muted-foreground hover:text-foreground text-xs rounded-lg flex items-center justify-center gap-2"
                 >
                   <RotateCcw className="h-3.5 w-3.5" /> Bersihkan Rute
                 </Button>

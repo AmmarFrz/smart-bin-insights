@@ -262,3 +262,25 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
   -moz-appearance: textfield; /* Firefox */
 }
+
+/* Leaflet popup overrides for theme compatibility */
+.leaflet-popup-content-wrapper {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-radius: 12px !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12) !important;
+}
+.leaflet-popup-tip {
+  background: hsl(var(--card)) !important;
+}
+.leaflet-popup-content {
+  margin: 10px 14px !important;
+  color: hsl(var(--foreground)) !important;
+}
+.leaflet-popup-content p {
+  color: hsl(var(--foreground)) !important;
+}
+.leaflet-popup-close-button {
+  color: hsl(var(--muted-foreground)) !important;
+}
