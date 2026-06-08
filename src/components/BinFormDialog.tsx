@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Loader2, MapPin } from "lucide-react";
+import { Loader2, MapPin, Search } from "lucide-react";
 import { MapPicker } from "@/components/MapPicker";
 import type { BinRow } from "@/hooks/useBins";
 import type { DeviceRow } from "@/hooks/useDevices";
@@ -41,6 +41,7 @@ interface Props {
 
 export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Props) {
   const [loading, setLoading] = useState(false);
+  const [searching, setSearching] = useState(false);
   const [form, setForm] = useState({
     bin_code: "", location: "", height_cm: 30,
     threshold_warning: 70, threshold_full: 90, device_id: "none" as string,
@@ -106,6 +107,28 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
     );
   };
 
+  const searchLocation = async () => {
+    if (!form.location) {
+      toast.error("Silakan masukkan deskripsi lokasi terlebih dahulu");
+      return;
+    }
+    setSearching(true);
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.location)}`);
+      const data = await res.json();
+      if (data && data.length > 0) {
+        setForm(f => ({ ...f, latitude: parseFloat(data[0].lat), longitude: parseFloat(data[0].lon) }));
+        toast.success("Lokasi otomatis ditemukan di peta!");
+      } else {
+        toast.error("Lokasi tidak ditemukan di peta");
+      }
+    } catch (e) {
+      toast.error("Gagal mencari koordinat lokasi");
+    } finally {
+      setSearching(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -134,7 +157,12 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
 
           <div className="space-y-2">
             <Label>Location (description)</Label>
-            <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="Building A - Lobby" required />
+            <div className="flex gap-2">
+              <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="Alun Alun Kidul" required />
+              <Button type="button" variant="secondary" onClick={searchLocation} disabled={searching} className="shrink-0 gap-2">
+                {searching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />} Cari di Peta
+              </Button>
+            </div>
           </div>
 
           <div className="space-y-2">
