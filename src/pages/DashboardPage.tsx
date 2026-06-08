@@ -28,11 +28,12 @@ export default function DashboardPage() {
 
   const avgFillByHour = useMemo(() => {
     // Approximate trend from current bins (placeholder until enough sensor history)
+    // Removed Math.random() so the graph shifts smoothly instead of jumping wildly during real-time demo
     return Array.from({ length: 12 }, (_, i) => {
       const avgNow = bins.length ? bins.reduce((s, b) => s + b.current_fill_percentage, 0) / bins.length : 0;
       return {
         time: `${(i * 2).toString().padStart(2, "0")}:00`,
-        avg: Math.round(Math.max(0, Math.min(100, avgNow + Math.sin(i / 2) * 12 + (Math.random() - 0.5) * 8))),
+        avg: Math.round(Math.max(0, Math.min(100, avgNow + Math.sin(i / 2) * 12))),
       };
     });
   }, [bins]);
