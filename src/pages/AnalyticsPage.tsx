@@ -204,7 +204,7 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="glass-card rounded-xl p-5">
-          <h3 className="text-sm font-semibold mb-4 text-foreground/90">Daily Collections</h3>
+          <h3 className="text-sm font-semibold mb-4 text-foreground/90">Daily Waste Volume (Ton)</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={dailyWasteData}>
@@ -221,14 +221,14 @@ export default function AnalyticsPage() {
                     boxShadow: "0 8px 32px hsla(0,0%,0%,0.4)",
                   }}
                 />
-                <Bar dataKey="collections" fill="hsl(205, 85%, 55%)" radius={[6, 6, 0, 0]} name="Collections" />
+                <Bar dataKey="totalWaste" fill="hsl(155, 70%, 45%)" radius={[6, 6, 0, 0]} name="Total Waste (Ton)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         <div className="glass-card rounded-xl p-5">
-          <h3 className="text-sm font-semibold mb-4 text-foreground/90">Weekly Monitoring</h3>
+          <h3 className="text-sm font-semibold mb-4 text-foreground/90">Weekly Waste Volume (Ton)</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={weeklyData}>
@@ -245,7 +245,7 @@ export default function AnalyticsPage() {
                     boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
                   }}
                 />
-                <Line type="monotone" dataKey="avgFill" stroke="hsl(155, 70%, 45%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(var(--card))" }} name="Avg Fill %" />
+                <Line type="monotone" dataKey="totalWaste" stroke="hsl(155, 70%, 45%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(var(--card))" }} name="Total Waste (Ton)" />
                 <Line type="monotone" dataKey="totalCollections" stroke="hsl(205, 85%, 55%)" strokeWidth={2.5} dot={{ r: 4, strokeWidth: 2, fill: "hsl(var(--card))" }} name="Collections" />
               </LineChart>
             </ResponsiveContainer>

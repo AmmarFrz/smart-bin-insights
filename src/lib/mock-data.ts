@@ -38,20 +38,20 @@ export const alerts: Alert[] = [
 ];
 
 export const dailyWasteData = [
-  { day: "Sen", avgFill: 82, collections: 145 },
-  { day: "Sel", avgFill: 78, collections: 138 },
-  { day: "Rab", avgFill: 85, collections: 152 },
-  { day: "Kam", avgFill: 80, collections: 142 },
-  { day: "Jum", avgFill: 88, collections: 156 },
-  { day: "Sab", avgFill: 92, collections: 165 },
-  { day: "Min", avgFill: 95, collections: 170 },
+  { day: "Sen", avgFill: 82, collections: 145, totalWaste: 598 },
+  { day: "Sel", avgFill: 78, collections: 138, totalWaste: 585 },
+  { day: "Rab", avgFill: 85, collections: 152, totalWaste: 605 },
+  { day: "Kam", avgFill: 80, collections: 142, totalWaste: 590 },
+  { day: "Jum", avgFill: 88, collections: 156, totalWaste: 610 },
+  { day: "Sab", avgFill: 92, collections: 165, totalWaste: 620 },
+  { day: "Min", avgFill: 95, collections: 170, totalWaste: 625 },
 ];
 
 export const weeklyData = [
-  { week: "Minggu 1", avgFill: 82, totalCollections: 980 },
-  { week: "Minggu 2", avgFill: 85, totalCollections: 1050 },
-  { week: "Minggu 3", avgFill: 88, totalCollections: 1120 },
-  { week: "Minggu 4", avgFill: 84, totalCollections: 1010 },
+  { week: "Minggu 1", avgFill: 82, totalCollections: 980, totalWaste: 4180 },
+  { week: "Minggu 2", avgFill: 85, totalCollections: 1050, totalWaste: 4250 },
+  { week: "Minggu 3", avgFill: 88, totalCollections: 1120, totalWaste: 4320 },
+  { week: "Minggu 4", avgFill: 84, totalCollections: 1010, totalWaste: 4210 },
 ];
 
 export const monthlyData = [
