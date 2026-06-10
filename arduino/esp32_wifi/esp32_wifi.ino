@@ -37,8 +37,8 @@
 #include <LiquidCrystal_I2C.h>
 
 // ============ KONFIGURASI — UBAH SESUAI PUNYAMU ============
-const char* WIFI_SSID     = "KOS EL FATA 1";
-const char* WIFI_PASSWORD = "bismillahdulu";
+const char* WIFI_SSID     = "Ammar";
+const char* WIFI_PASSWORD = "21222324";
 
 // Dapat dari dashboard /admin -> Devices -> copy api_key
 const char* API_KEY  = "adb5359c1318e6312734e235e55d909afc1c8a26873a2c8f";

@@ -303,6 +303,11 @@ export default function AnalyticsPage() {
           </ResponsiveContainer>
         </div>
       </div>
+
+      <div className="text-center mt-8 text-xs text-muted-foreground/70 border-t border-border/40 pt-4">
+        <p>Sumber Data Historis: Sistem Informasi Pengelolaan Sampah Nasional (SIPSN) & Laporan DLH Kabupaten Sleman 2024/2025.</p>
+        <p>Volume timbulan sampah rata-rata tercatat sebesar 601,79 Ton/Hari.</p>
+      </div>
     </div>
   );
 }

@@ -38,27 +38,27 @@ export const alerts: Alert[] = [
 ];
 
 export const dailyWasteData = [
-  { day: "Mon", avgFill: 35, collections: 3 },
-  { day: "Tue", avgFill: 42, collections: 4 },
-  { day: "Wed", avgFill: 55, collections: 5 },
-  { day: "Thu", avgFill: 48, collections: 4 },
-  { day: "Fri", avgFill: 62, collections: 6 },
-  { day: "Sat", avgFill: 28, collections: 2 },
-  { day: "Sun", avgFill: 20, collections: 1 },
+  { day: "Sen", avgFill: 82, collections: 145 },
+  { day: "Sel", avgFill: 78, collections: 138 },
+  { day: "Rab", avgFill: 85, collections: 152 },
+  { day: "Kam", avgFill: 80, collections: 142 },
+  { day: "Jum", avgFill: 88, collections: 156 },
+  { day: "Sab", avgFill: 92, collections: 165 },
+  { day: "Min", avgFill: 95, collections: 170 },
 ];
 
 export const weeklyData = [
-  { week: "W1", avgFill: 38, totalCollections: 22 },
-  { week: "W2", avgFill: 45, totalCollections: 28 },
-  { week: "W3", avgFill: 41, totalCollections: 25 },
-  { week: "W4", avgFill: 52, totalCollections: 30 },
+  { week: "Minggu 1", avgFill: 82, totalCollections: 980 },
+  { week: "Minggu 2", avgFill: 85, totalCollections: 1050 },
+  { week: "Minggu 3", avgFill: 88, totalCollections: 1120 },
+  { week: "Minggu 4", avgFill: 84, totalCollections: 1010 },
 ];
 
 export const monthlyData = [
-  { month: "Jan", totalWaste: 1200, collections: 85 },
-  { month: "Feb", totalWaste: 1100, collections: 78 },
-  { month: "Mar", totalWaste: 1350, collections: 92 },
-  { month: "Apr", totalWaste: 980, collections: 65 },
+  { month: "Jan", totalWaste: 18655, collections: 4250 },
+  { month: "Feb", totalWaste: 17890, collections: 3980 },
+  { month: "Mar", totalWaste: 19210, collections: 4520 },
+  { month: "Apr", totalWaste: 18053, collections: 4160 },
 ];
 
 export const hourlyFillData = Array.from({ length: 24 }, (_, i) => ({

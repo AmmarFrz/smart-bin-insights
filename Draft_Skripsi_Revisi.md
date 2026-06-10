@@ -149,12 +149,64 @@ void startConfigPortal() {
 }
 ```
 
+Setelah arsitektur perangkat keras selesai diintegrasikan, tahap pengujian berlanjut pada implementasi instruksi perangkat lunak (*firmware*) yang ditanamkan di dalam memori mikrokontroler ESP32. Sistem ini dirancang untuk beroperasi secara otonom dengan mengeksekusi siklus program utama (*main loop*) secara berulang (periodik). Pada setiap siklusnya, instruksi pertama yang dieksekusi adalah memicu sensor HC-SR04 untuk melakukan kalkulasi pantulan jarak secara fisis. Hasil pembacaan mentah tersebut kemudian dilewatkan pada lapisan filter validasi (*noise filter*) untuk mencegah masuknya data pencilan, sebelum akhirnya dikonversi secara matematis menjadi metrik persentase kapasitas (*volume*).
+
+Agar hasil kalkulasi lokal tersebut dapat dipantau dari jarak jauh melalui *web dashboard*, mikrokontroler perlu mengonstruksi paket data standar yang dapat dikenali oleh *server*. Dalam implementasi ini, ESP32 memaketkan data menggunakan format JSON (*JavaScript Object Notation*). Paket *payload* ini memuat tiga parameter krusial: identitas unik pengenal perangkat (`bin_id`), hasil pembacaan jarak mentah (`distance`), serta persentase ruang terisi (`calculated_volume`). Segera setelah struktur JSON terbentuk, modul Wi-Fi internal pada ESP32 akan menginisiasi protokol komunikasi *HTTP POST* untuk mentransmisikan *payload* tersebut langsung menuju *endpoint REST API* di layanan basis data Supabase. 
+
+Secara komprehensif, alur logika komputasi yang dieksekusi oleh mikrokontroler dapat dilihat pada **Listing 4.1** berikut, sedangkan struktur muatan data yang ditransmisikan dijabarkan pada **Listing 4.2**.
+
+**Listing 4.1** Algoritma *Main Loop* pada *Firmware* ESP32
+```text
+ALGORITMA Firmware_ESP32_Loop
+  
+    // Membaca jarak dari sensor HC-SR04
+    Picu pin Trigger (HIGH selama 10 mikrodetik, lalu LOW)
+    Durasi = Baca durasi pulsa HIGH pada pin Echo
+    Jarak = Durasi * 0.034 / 2
+    
+    // Validasi data pencilan (noise filter)
+    Jika Jarak >= 2 dan Jarak <= max_depth Maka
+      Persentase = (1 - (Jarak / max_depth)) * 100
+      Jika Persentase < 0 Maka Persentase = 0
+      Jika Persentase > 100 Maka Persentase = 100
+      
+      // Kirim data ke REST API Supabase
+      Status_Kirim = HTTP_POST(URL_Supabase, JSON_Payload(bin_id, Jarak, Persentase))
+      
+      // Update Layar LCD Lokal
+      Tampilkan_LCD("Vol: " + Persentase + "%")
+      Jika Status_Kirim == 201 Maka
+        Tampilkan_LCD("Kirim: Sukses")
+      Lainnya
+        Tampilkan_LCD("Kirim: Gagal")
+      Akhir Jika
+    Akhir Jika
+    
+    Tidur / Delay(30000) // Transmisi berkala setiap 30 detik
+```
+
+**Listing 4.2** Struktur Data JSON *Payload* yang Dikirim ke *REST API*
+```json
+{
+  "bin_id": "8f3b9c7d-4a1e-9b2c-8d7e-6f5a4b3c2d1e",
+  "distance": 14.8,
+  "calculated_volume": 75
+}
+```
+
+**Tabel 4.x** Definisi Parameter pada *Payload* JSON
+| Parameter Objek | Tipe Data | Deskripsi / Fungsi |
+| :--- | :--- | :--- |
+| `bin_id` | Teks (*String / UUID*) | Pengenal unik yang berfungsi untuk melacak dan mengenali identitas spesifik dari perangkat mikrokontroler pengirim data. |
+| `distance` | Bilangan Desimal (*Float*) | Nilai jarak mentah antara sensor dengan permukaan tumpukan sampah yang direpresentasikan dalam satuan sentimeter (cm). |
+| `calculated_volume` | Bilangan Bulat (*Integer*) | Hasil kalkulasi persentase kapasitas tempat sampah (rentang 0% hingga 100%) yang telah dihitung oleh mikrokontroler sebelum dikirimkan ke *server*. |
+
 **4.2.2 Pengembangan Web Dashboard**
 Desain antarmuka web "EcoPhora" diawali dengan pemilihan kombinasi warna *Dark Mode* (mode gelap) dengan warna aksen hijau. Sistem ini terbagi menjadi tiga halaman utama. 
 
-Halaman Autentikasi (Login) berfungsi sebagai gerbang keamanan utama sistem untuk membatasi hak akses. Pada halaman ini, desain difokuskan pada fungsionalitas formulir masuk dengan tata letak minimalis yang memusat di tengah layar (*center-aligned*). Di bagian atas, terdapat logo dan nama aplikasi "EcoPhora - Smart Waste Management System". Untuk melakukan otentikasi, pengguna harus menekan tombol *Sign In* berwarna hijau solid yang kemudian akan mengeksekusi proses validasi kredensial pengguna menuju peladen basis data.
+Halaman Autentikasi (Login) berfungsi sebagai gerbang keamanan utama sistem untuk membatasi hak akses. Pada halaman ini, desain difokuskan pada fungsionalitas formulir masuk dengan tata letak minimalis yang memusat di tengah layar (*center-aligned*). Di bagian atas, terdapat logo dan nama aplikasi "EcoPhora - Smart Waste Management System". Untuk melakukan otentikasi, pengguna harus menekan tombol *Sign In* berwarna hijau solid yang kemudian akan mengeksekusi proses validasi kredensial pengguna menuju *server* basis data.
 
-Halaman *Dashboard* berperan sebagai pusat kendali operasional (*control center*) setelah administrator berhasil melewati tahapan autentikasi. Antarmuka ini secara spesifik dirancang untuk menyajikan rekapitulasi data sensor secara *real-time* tanpa mengharuskan pengguna memuat ulang halaman (*refresh*). Transmisi pembaruan data terjadi seketika di layar pengguna, yang dimungkinkan berkat pemanfaatan fitur *realtime subscription* dari peladen basis data Supabase.
+Halaman *Dashboard* berperan sebagai pusat kendali operasional (*control center*) setelah administrator berhasil melewati tahapan autentikasi. Antarmuka ini secara spesifik dirancang untuk menyajikan rekapitulasi data sensor secara *real-time* tanpa mengharuskan pengguna memuat ulang halaman (*refresh*). Transmisi pembaruan data terjadi seketika di layar pengguna, yang dimungkinkan berkat pemanfaatan fitur *realtime subscription* dari *server* basis data Supabase.
 Pada struktur antarmukanya, tata letak halaman ini dipecah ke dalam beberapa segmen fungsional sebagai berikut:
 1. **Panel Statistik Makro**: Tersusun atas empat kartu indikator di bagian teratas layar. Parameter yang ditampilkan mencakup jumlah keseluruhan tong sampah yang diawasi (*Total Smart Bins*), rasio perangkat mikrokontroler ESP32 yang berstatus terhubung ke jaringan (*Active Devices*), kalkulasi wadah yang telah menyentuh batas kapasitas maksimal (*Full Bins*), serta akumulasi tugas pengangkutan yang perlu segera dieksekusi oleh petugas lapangan (*Collection Tasks*).
 2. **Daftar Tugas Pengangkutan (Smart Collection Route)**: Modul ini dirancang agar beroperasi secara kondisional. Apabila terdapat tempat sampah yang volume isiannya mencapai batas peringatan (*warning*) atau ambang batas penuh, sistem akan otomatis menampilkannya dalam wujud daftar prioritas. Unit dengan persentase muatan tertinggi akan ditempatkan pada urutan teratas. Modul ini turut dilengkapi dengan tombol "Tandai Selesai" guna memfasilitasi petugas dalam memberikan konfirmasi pasca-pengangkutan limbah.
