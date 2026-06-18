@@ -21,6 +21,8 @@ export interface BinRow {
   updated_at: string;
   is_maintenance: boolean;
   devices?: { device_name: string; esp_id: string; online: boolean } | null;
+  previous_fill_percentage?: number | null;
+  previous_reading_at?: string | null;
 }
 
 export function useBins() {
@@ -32,7 +34,19 @@ export function useBins() {
       .from("bins")
       .select("*, devices(device_name, esp_id, online)")
       .order("bin_code", { ascending: true });
-    if (!error && data) setBins(data as unknown as BinRow[]);
+      
+    if (!error && data) {
+      setBins(prevBins => {
+        return (data as unknown as BinRow[]).map(newBin => {
+          const oldBin = prevBins.find(b => b.id === newBin.id);
+          return {
+            ...newBin,
+            previous_fill_percentage: oldBin ? oldBin.current_fill_percentage : null,
+            previous_reading_at: oldBin ? oldBin.last_reading_at : null
+          };
+        });
+      });
+    }
     setLoading(false);
   }, []);
 

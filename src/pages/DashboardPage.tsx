@@ -8,7 +8,7 @@ import { useAlerts } from "@/hooks/useAlerts";
 import { Trash2, Cpu, AlertTriangle, TruckIcon, Activity, Clock, Loader2, ShieldCheck, ShieldAlert, ShieldX, Download } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from "recharts";
 import { getFillPredictionDetail } from "@/lib/utils";
-import { getSensorHealth } from "@/lib/anomaly-detection";
+import { getSensorHealth, detectAnomaly } from "@/lib/anomaly-detection";
 import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -180,7 +180,15 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {bins.map(bin => {
               const isOnline = bin.devices?.online ?? false;
-              const health = getSensorHealth(bin.last_reading_at, isOnline);
+              let health = getSensorHealth(bin.last_reading_at, isOnline);
+              
+              if (health.severity === "normal" && bin.previous_fill_percentage !== undefined) {
+                const anomaly = detectAnomaly(bin.current_fill_percentage, bin.previous_fill_percentage, bin.last_reading_at);
+                if (anomaly.type) {
+                  health = anomaly;
+                }
+              }
+              
               const HealthIcon = health.severity === "normal" ? ShieldCheck : health.severity === "warning" ? ShieldAlert : ShieldX;
               const dotClass = health.severity === "normal"
                 ? "bg-emerald-400 shadow-emerald-400/50 animate-pulse"
