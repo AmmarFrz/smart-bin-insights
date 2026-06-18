@@ -122,8 +122,9 @@ export function BinFormDialog({ open, onOpenChange, bin, devices, onSaved }: Pro
       } else {
         toast.error("Lokasi tidak ditemukan di peta");
       }
-    } catch (e) {
-      toast.error("Gagal mencari koordinat lokasi");
+    } catch (error) {
+      console.error("Geocoding error:", error);
+      toast.error("Gagal mencari koordinat lokasi. Periksa koneksi internet atau coba lagi.");
     } finally {
       setSearching(false);
     }

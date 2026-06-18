@@ -14,29 +14,19 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
+import { useSensorHistory } from "@/hooks/useSensorHistory";
 
 export default function DashboardPage() {
   const { bins, loading: binsLoading } = useBins();
   const { devices } = useDevices();
-  const { alerts, unreadCount } = useAlerts();
+  const { alerts } = useAlerts();
+  const { historyData } = useSensorHistory();
 
   const fullBins = bins.filter(b => b.status === "full" && !b.is_maintenance).length;
   const onlineDevices = devices.filter(d => d.online).length;
   
   // Bins that need collection
   const binsToCollect = bins.filter(b => !b.is_maintenance && b.current_fill_percentage >= b.threshold_warning).sort((a, b) => b.current_fill_percentage - a.current_fill_percentage);
-
-  const avgFillByHour = useMemo(() => {
-    // Approximate trend from current bins (placeholder until enough sensor history)
-    // Removed Math.random() so the graph shifts smoothly instead of jumping wildly during real-time demo
-    return Array.from({ length: 12 }, (_, i) => {
-      const avgNow = bins.length ? bins.reduce((s, b) => s + b.current_fill_percentage, 0) / bins.length : 0;
-      return {
-        time: `${(i * 2).toString().padStart(2, "0")}:00`,
-        avg: Math.round(Math.max(0, Math.min(100, avgNow + Math.sin(i / 2) * 12))),
-      };
-    });
-  }, [bins]);
 
   const collectionsByDay = useMemo(() => {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -230,7 +220,7 @@ export default function DashboardPage() {
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={avgFillByHour}>
+              <AreaChart data={historyData}>
                 <defs>
                   <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="hsl(155, 70%, 50%)" stopOpacity={0.35} />
