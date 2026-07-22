@@ -96,20 +96,17 @@ export default function MapViewPage() {
       return;
     }
 
-    // Filter bins that are actually full (fill level >= 75%)
-    let targetBins = mappedBins.filter(b => b.current_fill_percentage >= 75);
-    let simulated = false;
-
-    // Fallback: If no bins are full, simulate by selecting all bins above 30% to show off the route
-    if (targetBins.length === 0) {
-      targetBins = [...mappedBins].sort((a, b) => b.current_fill_percentage - a.current_fill_percentage).slice(0, 3);
-      simulated = true;
-    }
+    // Filter bins that actually need collection (warning or full threshold)
+    let targetBins = mappedBins.filter(b => !b.is_maintenance && b.current_fill_percentage >= (b.threshold_warning || 75));
+    let simulated = false; // Kept for compatibility with existing state
 
     if (targetBins.length === 0) {
-      toast.error("Tidak ada tempat sampah untuk dimasukkan ke rute.");
+      toast.error("Semua tempat sampah masih aman. Tidak ada prioritas pengangkutan saat ini.");
       return;
     }
+    
+    // Sort based on highest fill percentage
+    targetBins.sort((a, b) => b.current_fill_percentage - a.current_fill_percentage);
 
     const path: [number, number][] = [depotCoord];
     const unvisited = [...targetBins];
@@ -145,11 +142,7 @@ export default function MapViewPage() {
     setShowRoute(true);
     setIsSimulated(simulated);
 
-    if (simulated) {
-      toast.info("Semua tempat sampah kosong. Mengaktifkan Simulasi Rute untuk demo DLH!");
-    } else {
-      toast.success("Rute pengangkutan sampah terpendek berhasil dihitung!");
-    }
+    toast.success("Rute pengangkutan prioritas berhasil dihitung berdasarkan data real-time!");
   };
 
   const clearRoute = () => {
@@ -398,11 +391,7 @@ export default function MapViewPage() {
                     <p className="text-sm font-bold text-emerald-400">{(co2Saved / 21).toFixed(2)} Pohon</p>
                   </div>
 
-                  {isSimulated && (
-                    <div className="bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg text-[10px] text-amber-400 text-center leading-relaxed">
-                      💡 <strong>Simulation Mode Aktif:</strong> Semua sampah kosong. Sistem mensimulasikan rute demo untuk UPTD.
-                    </div>
-                  )}
+
 
                   {/* Navigation Checkpoints */}
                   <div className="space-y-3">
