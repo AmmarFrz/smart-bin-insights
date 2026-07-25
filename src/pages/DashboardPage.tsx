@@ -314,24 +314,12 @@ export default function DashboardPage() {
               </div>
             )}
             {bins.slice(0, 6).map(bin => {
-              const prediction = getFillPredictionDetail(bin.current_fill_percentage);
-              const predictionColorClass = prediction.color === "red"
-                ? "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20"
-                : prediction.color === "amber"
-                  ? "text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20"
-                  : "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20";
-              const pulseClass = prediction.urgency === "critical" || prediction.urgency === "urgent" ? "animate-pulse" : "";
               return (
                 <div key={bin.id} className="flex flex-col gap-1.5 p-3 rounded-lg hover:bg-muted/50 transition-all duration-200 border border-transparent hover:border-border">
                   <div className="flex items-center gap-3">
                     <span className="text-xs font-mono text-muted-foreground w-20 truncate">{bin.bin_code}</span>
                     <div className="flex-1"><FillGauge percentage={bin.is_maintenance ? 0 : bin.current_fill_percentage} /></div>
                     <BinStatusBadge status={bin.status} isMaintenance={bin.is_maintenance} />
-                  </div>
-                  <div className="flex justify-end px-1">
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${predictionColorClass} ${pulseClass}`}>
-                      {prediction.icon} {prediction.text}
-                    </span>
                   </div>
                 </div>
               );

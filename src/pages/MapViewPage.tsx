@@ -291,11 +291,6 @@ export default function MapViewPage() {
                       </p>
                       <div className="text-xs space-y-1">
                         <div>Kapasitas: <span className="font-semibold">{bin.current_fill_percentage}%</span></div>
-                        <div className="text-[10px] text-indigo-400 font-semibold flex items-center gap-1">
-                          🔮 AI Forecast: {bin.current_fill_percentage >= 90 
-                            ? "Penuh (Segera Ambil)" 
-                            : `Penuh dalam ~${Math.round((100 - bin.current_fill_percentage) / 4) + 1}j`}
-                        </div>
                       </div>
                       {bin.devices && (
                         <div className="text-xs flex items-center gap-1">
@@ -435,11 +430,6 @@ export default function MapViewPage() {
                               <div className="flex flex-col">
                                 <span className="text-xs font-semibold text-foreground">{bin.bin_code}</span>
                                 <span className="text-[9px] text-muted-foreground mt-0.5 truncate max-w-[140px]">{bin.location}</span>
-                                <span className="text-[8px] text-indigo-400 font-mono mt-1 font-semibold">
-                                  🔮 AI: {bin.current_fill_percentage >= 90 
-                                    ? "Penuh (Segera Ambil)" 
-                                    : `Penuh dalam ~${Math.round((100 - bin.current_fill_percentage) / 4) + 1}j`}
-                                </span>
                               </div>
                               <div className="flex flex-col items-end">
                                 <span className={`text-xs font-extrabold ${capacityColor}`}>{bin.current_fill_percentage}%</span>

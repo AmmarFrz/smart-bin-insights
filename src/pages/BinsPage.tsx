@@ -65,9 +65,6 @@ export default function BinsPage() {
                     <span className="flex items-center gap-1"><Ruler className="h-3 w-3" /> {distance} cm</span>
                     <span>Diperbarui: {bin.last_reading_at ? new Date(bin.last_reading_at).toLocaleString() : "Belum pernah"}</span>
                   </div>
-                  <div className="text-xs font-medium text-emerald-700 bg-emerald-100/50 px-2.5 py-1 rounded-md inline-flex w-fit">
-                    {getFillPrediction(fill)}
-                  </div>
                 </div>
 
                 <LcdDisplay lines={[`Volume: ${fill}%  ${distance}cm`, `Status: ${bin.status.toUpperCase()}`]} />
