@@ -29,35 +29,38 @@
  * ============================================================
  */
 
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
-#include <Wire.h>
+#include <HTTPClient.h>
 #include <LiquidCrystal_I2C.h>
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <Wire.h>
 
 // ============ KONFIGURASI — UBAH SESUAI PUNYAMU ============
-const char* WIFI_SSID     = "Ammar";
-const char* WIFI_PASSWORD = "21222324";
+const char *WIFI_SSID = "Ammar";
+const char *WIFI_PASSWORD = "21222324";
 
 // Dapat dari dashboard /admin -> Devices -> copy api_key
-const char* API_KEY  = "adb5359c1318e6312734e235e55d909afc1c8a26873a2c8f";
+const char *API_KEY = "adb5359c1318e6312734e235e55d909afc1c8a26873a2c8f";
 // Dapat dari dashboard /admin -> Bins -> bin_code (mis: "BIN-001")
-const char* BIN_CODE = "BIN-001";
+const char *BIN_CODE = "BIN-001";
 
 // Endpoint Supabase Cloud (ingest-reading)
-const char* INGEST_URL =
-  "https://bnbzwrrbaghgggtxzmfb.supabase.co/functions/v1/ingest-reading";
+const char *INGEST_URL =
+    "https://bnbzwrrbaghgggtxzmfb.supabase.co/functions/v1/ingest-reading";
 
 // Interval kirim data ke server (millidetik)
-unsigned long currentIntervalMs = 5000UL;    // Fast mode untuk pengujian skripsi (5 detik)
+unsigned long currentIntervalMs =
+    5000UL; // Fast mode untuk pengujian skripsi (5 detik)
 
 // ============ PIN ============
-#define PIN_TRIG    5
-#define PIN_ECHO    18
-#define PIN_LED_GREEN  25
+#define PIN_TRIG 5
+#define PIN_ECHO 18
+#define PIN_TRIG_2 19
+#define PIN_ECHO_2 23
+#define PIN_LED_GREEN 25
 #define PIN_LED_YELLOW 26
-#define PIN_LED_RED    27
+#define PIN_LED_RED 27
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -85,50 +88,56 @@ void updateLEDs(int fillPct) {
   }
 }
 
-float readDistanceCm() {
+float readDistanceCm(int trigPin, int echoPin) {
   // Trigger pulse 10us
-  digitalWrite(PIN_TRIG, LOW);
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
-  digitalWrite(PIN_TRIG, HIGH);
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(PIN_TRIG, LOW);
+  digitalWrite(trigPin, LOW);
 
   // Echo, timeout 30ms (~5m)
-  long duration = pulseIn(PIN_ECHO, HIGH, 30000UL);
-  if (duration == 0) return -1.0f;            // timeout / out-of-range
+  long duration = pulseIn(echoPin, HIGH, 30000UL);
+  if (duration == 0)
+    return -1.0f; // timeout / out-of-range
 
   // Kecepatan suara 0.0343 cm/us, dibagi 2 (pulang-pergi)
   float distance = (duration * 0.0343f) / 2.0f;
   return distance;
 }
 
-float readDistanceAveraged(int samples = 5) {
+float readDistanceAveraged(int trigPin, int echoPin, int samples = 5) {
   float sum = 0;
   int valid = 0;
   for (int i = 0; i < samples; i++) {
-    float d = readDistanceCm();
-    if (d > 0 && d < 400) { sum += d; valid++; }
+    float d = readDistanceCm(trigPin, echoPin);
+    if (d > 0 && d < 400) {
+      sum += d;
+      valid++;
+    }
     delay(60);
   }
-  if (valid == 0) return -1.0f;
+  if (valid == 0)
+    return -1.0f;
   return sum / valid;
 }
 
-
 void connectWiFi() {
   Serial.printf("[WiFi] Connecting to %s ", WIFI_SSID);
-  WiFi.disconnect(true);  // Hapus cache WiFi sebelumnya (Penting untuk iPhone)
+  WiFi.disconnect(true); // Hapus cache WiFi sebelumnya (Penting untuk iPhone)
   delay(1000);
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   unsigned long start = millis();
   while (WiFi.status() != WL_CONNECTED && millis() - start < 20000UL) {
-    delay(500); Serial.print(".");
+    delay(500);
+    Serial.print(".");
   }
 
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.printf("\n[WiFi] Connected. IP=%s\n", WiFi.localIP().toString().c_str());
+    Serial.printf("\n[WiFi] Connected. IP=%s\n",
+                  WiFi.localIP().toString().c_str());
   } else {
     Serial.println("\n[WiFi] FAILED — will retry on next loop.");
   }
@@ -141,7 +150,7 @@ bool sendReading(float distanceCm) {
   }
 
   WiFiClientSecure client;
-  client.setInsecure();   // skip certificate validation (untuk testing)
+  client.setInsecure(); // skip certificate validation (untuk testing)
 
   HTTPClient http;
   http.setTimeout(10000);
@@ -154,7 +163,7 @@ bool sendReading(float distanceCm) {
   http.addHeader("x-api-key", API_KEY);
 
   JsonDocument doc;
-  doc["bin_code"]    = BIN_CODE;
+  doc["bin_code"] = BIN_CODE;
   doc["distance_cm"] = distanceCm;
 
   String payload;
@@ -182,9 +191,11 @@ bool sendReading(float distanceCm) {
       updateLEDs(globalFill);
 
       // --- SMART INTERVAL LOGIC (DINONAKTIFKAN UNTUK PENGUJIAN SKRIPSI) ---
-      // Kunci interval ke 5 detik (5000 ms) agar selalu lulus uji latency < 30 detik
+      // Kunci interval ke 5 detik (5000 ms) agar selalu lulus uji latency < 30
+      // detik
       currentIntervalMs = 5000UL;
-      Serial.printf("[INFO] Interval pengiriman dikunci: %lu ms\n", currentIntervalMs);
+      Serial.printf("[INFO] Interval pengiriman dikunci: %lu ms\n",
+                    currentIntervalMs);
     }
   }
 
@@ -200,23 +211,25 @@ void setup() {
 
   pinMode(PIN_TRIG, OUTPUT);
   pinMode(PIN_ECHO, INPUT);
-  
+  pinMode(PIN_TRIG_2, OUTPUT);
+  pinMode(PIN_ECHO_2, INPUT);
+
   pinMode(PIN_LED_GREEN, OUTPUT);
   pinMode(PIN_LED_YELLOW, OUTPUT);
   pinMode(PIN_LED_RED, OUTPUT);
-  
+
   // Nyalakan Hijau saat pertama kali booting
   updateLEDs(0);
 
-  lcd.init(); 
+  lcd.init();
   lcd.backlight();
-  lcd.setCursor(0,0); 
+  lcd.setCursor(0, 0);
   lcd.print("EcoPhora System");
-  lcd.setCursor(0,1);
+  lcd.setCursor(0, 1);
   lcd.print("Connecting WiFi..");
 
   connectWiFi();
-  lastSendMs = millis() - currentIntervalMs;   // langsung kirim di loop pertama
+  lastSendMs = millis() - currentIntervalMs; // langsung kirim di loop pertama
 }
 
 void loop() {
@@ -230,22 +243,39 @@ void loop() {
   if (millis() - lastSendMs >= currentIntervalMs) {
     lastSendMs = millis();
 
-    float d = readDistanceAveraged(5);
+    float d1 = readDistanceAveraged(PIN_TRIG, PIN_ECHO, 5);
+    float d2 = readDistanceAveraged(PIN_TRIG_2, PIN_ECHO_2, 5);
+    float d = -1.0f;
+
+    if (d1 > 0 && d2 > 0) {
+      d = (d1 + d2) / 2.0f;
+      Serial.printf(
+          "[SENSOR] S1: %.1f cm | S2: %.1f cm -> Rata-rata: %.1f cm\n", d1, d2,
+          d);
+    } else if (d1 > 0) {
+      d = d1;
+      Serial.printf("[SENSOR] S1 (aktif): %.1f cm | S2 (gagal)\n", d1);
+    } else if (d2 > 0) {
+      d = d2;
+      Serial.printf("[SENSOR] S1 (gagal) | S2 (aktif): %.1f cm\n", d2);
+    }
+
     if (d <= 0) {
       // --- SENSOR FALLBACK / SIMULATION MODE ---
-      Serial.println("[SENSOR] Sensor HC-SR04 tidak terdeteksi!");
-      Serial.println("[MOCK] Mengaktifkan Mode Simulasi Otomatis (Uji Coba Sebelum Dirangkai)...");
-      
-      // Simulasikan tong sampah yang terisi perlahan (tinggi awal 15 cm, berkurang 1.5 cm per siklus)
+      Serial.println("[SENSOR] Kedua Sensor HC-SR04 tidak terdeteksi!");
+      Serial.println("[MOCK] Mengaktifkan Mode Simulasi Otomatis (Uji Coba "
+                     "Sebelum Dirangkai)...");
+
+      // Simulasikan tong sampah yang terisi perlahan (tinggi awal 15 cm,
+      // berkurang 1.5 cm per siklus)
       static float simulatedDistance = 15.0f;
       simulatedDistance -= 1.5f;
       if (simulatedDistance < 2.0f) {
         simulatedDistance = 15.0f; // Reset kembali ke kosong jika sudah penuh
       }
       d = simulatedDistance;
+      Serial.printf("[SENSOR] distance = %.1f cm\n", d);
     }
-
-    Serial.printf("[SENSOR] distance = %.1f cm\n", d);
     sendReading(d);
   }
 
@@ -261,17 +291,20 @@ void loop() {
         lcd.print(" | ");
         lcd.print(globalFill);
         lcd.print("%");
-        
+
         lcd.setCursor(0, 1);
-        if (globalFill < 70) lcd.print("Status: AMAN");
-        else if (globalFill < 90) lcd.print("Status: SIAGA");
-        else lcd.print("Status: PENUH");
+        if (globalFill < 70)
+          lcd.print("Status: AMAN");
+        else if (globalFill < 90)
+          lcd.print("Status: SIAGA");
+        else
+          lcd.print("Status: PENUH");
       } else {
         // Layar 2: Jaringan & Jarak Fisik
         lcd.setCursor(0, 0);
         lcd.print("IP:");
         lcd.print(WiFi.localIP().toString());
-        
+
         lcd.setCursor(0, 1);
         lcd.print("Jarak: ");
         lcd.print(globalDist, 1);
