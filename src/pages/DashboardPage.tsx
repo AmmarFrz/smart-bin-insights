@@ -28,10 +28,7 @@ export default function DashboardPage() {
   // Bins that need collection
   const binsToCollect = bins.filter(b => !b.is_maintenance && b.current_fill_percentage >= b.threshold_warning).sort((a, b) => b.current_fill_percentage - a.current_fill_percentage);
 
-  const collectionsByDay = useMemo(() => {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    return days.map(day => ({ day, collections: Math.floor(Math.random() * 5) + 1 }));
-  }, []);
+
 
   if (binsLoading) {
     return (
@@ -277,31 +274,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 stagger-children">
-        <div className="glass-card rounded-xl p-5">
-          <h3 className="text-sm font-semibold mb-4">Pengambilan Mingguan (contoh)</h3>
-          <div className="h-52">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={collectionsByDay}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="day" tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
-                <YAxis tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }} stroke="hsl(var(--border))" />
-                <Tooltip
-                  contentStyle={{
-                    borderRadius: 10,
-                    border: "1px solid hsl(var(--border))",
-                    background: "hsl(var(--card))",
-                    color: "hsl(var(--foreground))",
-                    fontSize: 12,
-                    boxShadow: "0 8px 32px hsla(0,0%,0%,0.1)",
-                  }}
-                />
-                <Bar dataKey="collections" fill="hsl(205, 85%, 55%)" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
+      <div className="grid grid-cols-1 gap-4 stagger-children">
         <div className="glass-card rounded-xl p-5">
           <h3 className="text-sm font-semibold mb-4">Ringkasan Status Tempat Sampah</h3>
           <div className="space-y-3">
