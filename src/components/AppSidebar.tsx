@@ -12,13 +12,9 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Smart Bins", url: "/bins", icon: Trash2 },
-  { title: "Map View", url: "/map", icon: Map },
-  { title: "IoT Devices", url: "/devices", icon: Cpu },
-  { title: "Alerts", url: "/alerts", icon: Bell },
-  { title: "Analytics", url: "/analytics", icon: BarChart3 },
-  { title: "About & Features", url: "/about", icon: Info },
+  { title: "Beranda", url: "/", icon: LayoutDashboard },
+  { title: "Tempat Sampah", url: "/bins", icon: Trash2 },
+  { title: "Peta Lokasi", url: "/map", icon: Map },
 ];
 
 export function AppSidebar() {
@@ -38,14 +34,14 @@ export function AppSidebar() {
           {!collapsed && (
             <div>
               <h2 className="text-sm font-semibold text-sidebar-accent-foreground font-['Space_Grotesk']">EcoPhora</h2>
-              <p className="text-[10px] text-sidebar-foreground">Smart Waste System</p>
+              <p className="text-[10px] text-sidebar-foreground">Sistem Manajemen Sampah</p>
             </div>
           )}
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Monitoring</SidebarGroupLabel>
+          <SidebarGroupLabel>Pemantauan</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainItems.map((item) => (
@@ -63,14 +59,14 @@ export function AppSidebar() {
         </SidebarGroup>
         {isAdmin && (
           <SidebarGroup>
-            <SidebarGroupLabel>System</SidebarGroupLabel>
+            <SidebarGroupLabel>Sistem</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild isActive={isActive("/admin")}>
                     <NavLink to="/admin" end activeClassName="bg-sidebar-accent text-sidebar-primary">
                       <Settings className="h-4 w-4" />
-                      {!collapsed && <span>Admin Panel</span>}
+                      {!collapsed && <span>Panel Admin</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

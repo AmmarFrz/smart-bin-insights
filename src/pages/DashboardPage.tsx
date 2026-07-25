@@ -38,7 +38,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-center h-64">
         <div className="flex flex-col items-center gap-3">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground animate-pulse">Loading dashboard...</p>
+          <p className="text-sm text-muted-foreground animate-pulse">Memuat beranda...</p>
         </div>
       </div>
     );
@@ -105,8 +105,8 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-fade-in-up">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard <span className="text-gradient">Overview</span></h1>
-          <p className="text-sm text-muted-foreground mt-1">Real-time IoT waste monitoring system</p>
+          <h1 className="text-2xl font-bold tracking-tight">Beranda <span className="text-gradient">Utama</span></h1>
+          <p className="text-sm text-muted-foreground mt-1">Sistem pemantauan sampah IoT real-time</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button onClick={exportToCSV} variant="outline" className="gap-2 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/10">
@@ -119,10 +119,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
-        <StatCard title="Total Smart Bins" value={bins.length} subtitle="Monitored bins" icon={Trash2} />
-        <StatCard title="Active Devices" value={`${onlineDevices}/${devices.length}`} subtitle="ESP32 nodes online" icon={Cpu} iconClassName="bg-accent/10 group-hover:bg-accent/20 group-hover:glow-blue" />
-        <StatCard title="Full Bins" value={fullBins} subtitle="Needs collection" icon={AlertTriangle} iconClassName="bg-destructive/10 group-hover:bg-destructive/20 group-hover:glow-red" />
-        <StatCard title="Collection Tasks" value={binsToCollect.length} subtitle="Bins warning/full" icon={TruckIcon} iconClassName="bg-warning/10 group-hover:bg-warning/20 group-hover:glow-amber" />
+        <StatCard title="Total Tempat Sampah" value={bins.length} subtitle="Dipantau" icon={Trash2} />
+        <StatCard title="Perangkat Aktif" value={`${onlineDevices}/${devices.length}`} subtitle="Node ESP32 online" icon={Cpu} iconClassName="bg-accent/10 group-hover:bg-accent/20 group-hover:glow-blue" />
+        <StatCard title="Tempat Sampah Penuh" value={fullBins} subtitle="Perlu diambil" icon={AlertTriangle} iconClassName="bg-destructive/10 group-hover:bg-destructive/20 group-hover:glow-red" />
+        <StatCard title="Tugas Pengambilan" value={binsToCollect.length} subtitle="Peringatan/penuh" icon={TruckIcon} iconClassName="bg-warning/10 group-hover:bg-warning/20 group-hover:glow-amber" />
       </div>
 
       {/* === SMART COLLECTION ROUTE (Daftar Tugas) === */}
@@ -164,8 +164,8 @@ export default function DashboardPage() {
         <div className="glass-card rounded-xl p-5 animate-fade-in-up">
           <div className="flex items-center gap-2 mb-4">
             <ShieldCheck className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold">Sensor Health Monitor</h3>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Anomaly Detection</span>
+            <h3 className="text-sm font-semibold">Monitor Kesehatan Sensor</h3>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Deteksi Anomali</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {bins.map(bin => {
@@ -216,7 +216,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 stagger-children">
         <div className="lg:col-span-2 glass-card rounded-xl p-5">
           <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
-            <Activity className="h-4 w-4 text-primary" /> Real-Time Fill Levels
+            <Activity className="h-4 w-4 text-primary" /> Tingkat Kepenuhan Real-Time
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -248,7 +248,7 @@ export default function DashboardPage() {
 
         <div className="glass-card rounded-xl p-5">
           <h3 className="text-sm font-semibold mb-4 flex items-center gap-2">
-            <Clock className="h-4 w-4 text-primary" /> Recent Alerts
+            <Clock className="h-4 w-4 text-primary" /> Peringatan Terbaru
           </h3>
           <div className="space-y-3">
             {alerts.length === 0 && (
@@ -256,7 +256,7 @@ export default function DashboardPage() {
                 <div className="mx-auto w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                   <Clock className="h-5 w-5 text-primary/60" />
                 </div>
-                <p className="text-xs text-muted-foreground">No alerts yet</p>
+                <p className="text-xs text-muted-foreground">Belum ada peringatan</p>
               </div>
             )}
             {alerts.slice(0, 4).map(alert => (
@@ -281,7 +281,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 stagger-children">
         <div className="glass-card rounded-xl p-5">
-          <h3 className="text-sm font-semibold mb-4">Weekly Collections (sample)</h3>
+          <h3 className="text-sm font-semibold mb-4">Pengambilan Mingguan (contoh)</h3>
           <div className="h-52">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={collectionsByDay}>
@@ -305,14 +305,14 @@ export default function DashboardPage() {
         </div>
 
         <div className="glass-card rounded-xl p-5">
-          <h3 className="text-sm font-semibold mb-4">Bin Status Overview</h3>
+          <h3 className="text-sm font-semibold mb-4">Ringkasan Status Tempat Sampah</h3>
           <div className="space-y-3">
             {bins.length === 0 && (
               <div className="py-8 text-center">
                 <div className="mx-auto w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                   <Trash2 className="h-5 w-5 text-primary/60" />
                 </div>
-                <p className="text-xs text-muted-foreground">No bins registered yet. Add one from the Admin panel.</p>
+                <p className="text-xs text-muted-foreground">Belum ada tempat sampah. Tambahkan dari panel Admin.</p>
               </div>
             )}
             {bins.slice(0, 6).map(bin => {

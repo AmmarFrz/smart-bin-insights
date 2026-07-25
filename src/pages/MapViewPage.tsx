@@ -218,21 +218,21 @@ export default function MapViewPage() {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Map View <span className="text-gradient">Control</span></h1>
-          <p className="text-sm text-muted-foreground">Geographical overview and logistical routing of smart bins</p>
+          <h1 className="text-2xl font-bold tracking-tight">Peta Lokasi <span className="text-gradient">Utama</span></h1>
+          <p className="text-sm text-muted-foreground">Gambaran geografis dan rute logistik tempat sampah</p>
         </div>
         <div className="flex items-center gap-2 text-xs flex-wrap">
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-            <span className="h-2 w-2 rounded-full bg-emerald-500" /> Empty: {totals.empty}
+            <span className="h-2 w-2 rounded-full bg-emerald-500" /> Kosong: {totals.empty}
           </span>
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400">
-            <span className="h-2 w-2 rounded-full bg-amber-500" /> Medium: {totals.medium}
+            <span className="h-2 w-2 rounded-full bg-amber-500" /> Sedang: {totals.medium}
           </span>
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400">
-            <span className="h-2 w-2 rounded-full bg-red-500" /> Full: {totals.full}
+            <span className="h-2 w-2 rounded-full bg-red-500" /> Penuh: {totals.full}
           </span>
           <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-muted text-muted-foreground">
-            Mapped: {totals.mapped}/{totals.all}
+            Terpetakan: {totals.mapped}/{totals.all}
           </span>
         </div>
       </div>
@@ -240,15 +240,15 @@ export default function MapViewPage() {
       {totals.all === 0 ? (
         <div className="glass-card rounded-xl p-12 flex flex-col items-center text-center">
           <MapPin className="h-12 w-12 text-muted-foreground/30 mb-3" />
-          <p className="text-sm font-medium">No bins yet</p>
-          <p className="text-xs text-muted-foreground mt-1">Register bins from the Admin panel.</p>
+          <p className="text-sm font-medium">Belum ada tempat sampah</p>
+          <p className="text-xs text-muted-foreground mt-1">Daftarkan tempat sampah dari panel Admin.</p>
         </div>
       ) : totals.mapped === 0 ? (
         <div className="glass-card rounded-xl p-12 flex flex-col items-center text-center">
           <MapPin className="h-12 w-12 text-muted-foreground/30 mb-3" />
-          <p className="text-sm font-medium">No coordinates set</p>
+          <p className="text-sm font-medium">Belum ada koordinat yang diatur</p>
           <p className="text-xs text-muted-foreground mt-1">
-            Edit your bins in the Admin panel and click on the map to set their location.
+            Edit tempat sampah di panel Admin dan klik pada peta untuk mengatur lokasi.
           </p>
         </div>
       ) : (
@@ -307,7 +307,7 @@ export default function MapViewPage() {
                         </div>
                       )}
                       <p className="text-[10px] text-muted-foreground">
-                        Last: {bin.last_reading_at ? new Date(bin.last_reading_at).toLocaleString() : "Never"}
+                        Terakhir: {bin.last_reading_at ? new Date(bin.last_reading_at).toLocaleString() : "Belum pernah"}
                       </p>
                     </div>
                   </Popup>
@@ -346,7 +346,7 @@ export default function MapViewPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <Truck className="h-5 w-5 text-accent animate-bounce" />
-                <h3 className="text-sm font-semibold tracking-wide text-foreground">Logistics Optimizer</h3>
+                <h3 className="text-sm font-semibold tracking-wide text-foreground">Optimasi Logistik</h3>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Algoritma cerdas yang menghitung rute pengumpulan sampah terpendek dari depot ke tong sampah yang sudah penuh untuk menghemat biaya operasional.

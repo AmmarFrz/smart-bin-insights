@@ -17,15 +17,15 @@ export default function BinsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Smart Bin Monitoring</h1>
-        <p className="text-sm text-muted-foreground">Real-time ultrasonic sensor readings from all bins</p>
+        <h1 className="text-2xl font-bold tracking-tight">Pemantauan Tempat Sampah</h1>
+        <p className="text-sm text-muted-foreground">Pembacaan sensor ultrasonik real-time dari semua tempat sampah</p>
       </div>
 
       {bins.length === 0 ? (
         <div className="glass-card rounded-xl p-12 flex flex-col items-center text-center">
           <Trash2 className="h-12 w-12 text-muted-foreground/30 mb-3" />
-          <p className="text-sm font-medium">No bins yet</p>
-          <p className="text-xs text-muted-foreground mt-1">Admins can register bins from the Admin panel.</p>
+          <p className="text-sm font-medium">Belum ada tempat sampah</p>
+          <p className="text-xs text-muted-foreground mt-1">Admin dapat mendaftarkan tempat sampah dari panel Admin.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -38,7 +38,7 @@ export default function BinsPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-sm">{bin.bin_code}</p>
-                    <p className="text-xs text-muted-foreground">{bin.devices?.device_name ?? "No device linked"}</p>
+                    <p className="text-xs text-muted-foreground">{bin.devices?.device_name ?? "Tidak ada perangkat terhubung"}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <BinStatusBadge status={bin.status} />
@@ -63,19 +63,19 @@ export default function BinsPage() {
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1"><Ruler className="h-3 w-3" /> {distance} cm</span>
-                    <span>Updated: {bin.last_reading_at ? new Date(bin.last_reading_at).toLocaleString() : "Never"}</span>
+                    <span>Diperbarui: {bin.last_reading_at ? new Date(bin.last_reading_at).toLocaleString() : "Belum pernah"}</span>
                   </div>
                   <div className="text-xs font-medium text-emerald-700 bg-emerald-100/50 px-2.5 py-1 rounded-md inline-flex w-fit">
                     {getFillPrediction(fill)}
                   </div>
                 </div>
 
-                <LcdDisplay lines={[`Fill: ${fill}%  ${distance}cm`, `Status: ${bin.status.toUpperCase()}`]} />
+                <LcdDisplay lines={[`Volume: ${fill}%  ${distance}cm`, `Status: ${bin.status.toUpperCase()}`]} />
 
                 <div className="flex gap-4">
-                  <LedIndicator color="green" active={bin.status === "empty"} label="Empty" />
-                  <LedIndicator color="yellow" active={bin.status === "medium"} label="Medium" />
-                  <LedIndicator color="red" active={bin.status === "full"} label="Full" />
+                  <LedIndicator color="green" active={bin.status === "empty"} label="Kosong" />
+                  <LedIndicator color="yellow" active={bin.status === "medium"} label="Sedang" />
+                  <LedIndicator color="red" active={bin.status === "full"} label="Penuh" />
                 </div>
               </div>
             );

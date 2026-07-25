@@ -50,29 +50,29 @@ export default function AdminPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Admin Panel</h1>
-        <p className="text-sm text-muted-foreground">Manage devices, bins, and system settings</p>
+        <h1 className="text-2xl font-bold tracking-tight">Panel Admin</h1>
+        <p className="text-sm text-muted-foreground">Kelola perangkat, tempat sampah, dan pengaturan sistem</p>
       </div>
 
       {/* Devices */}
       <div className="glass-card rounded-xl p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold flex items-center gap-2">
-            <Cpu className="h-4 w-4 text-accent" /> IoT Devices ({devices.length})
+            <Cpu className="h-4 w-4 text-accent" /> Perangkat IoT ({devices.length})
           </h3>
           <Button size="sm" onClick={() => setDeviceDialog({ open: true, device: null })} className="gap-2">
-            <Plus className="h-4 w-4" /> Add Device
+            <Plus className="h-4 w-4" /> Tambah Perangkat
           </Button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-left">
-                <th className="pb-3 font-medium text-muted-foreground">ESP ID</th>
-                <th className="pb-3 font-medium text-muted-foreground">Name</th>
+                <th className="pb-3 font-medium text-muted-foreground">ID ESP</th>
+                <th className="pb-3 font-medium text-muted-foreground">Nama</th>
                 <th className="pb-3 font-medium text-muted-foreground">API Key</th>
                 <th className="pb-3 font-medium text-muted-foreground">Status</th>
-                <th className="pb-3 font-medium text-muted-foreground text-right">Actions</th>
+                <th className="pb-3 font-medium text-muted-foreground text-right">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -111,7 +111,7 @@ export default function AdminPage() {
                 </tr>
               ))}
               {devices.length === 0 && (
-                <tr><td colSpan={5} className="py-6 text-center text-sm text-muted-foreground">No devices yet. Click "Add Device" to register an ESP32.</td></tr>
+                <tr><td colSpan={5} className="py-6 text-center text-sm text-muted-foreground">Belum ada perangkat. Klik "Tambah Perangkat" untuk mendaftarkan ESP32.</td></tr>
               )}
             </tbody>
           </table>
@@ -122,22 +122,22 @@ export default function AdminPage() {
       <div className="glass-card rounded-xl p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold flex items-center gap-2">
-            <Trash2 className="h-4 w-4 text-primary" /> Smart Bins ({bins.length})
+            <Trash2 className="h-4 w-4 text-primary" /> Tempat Sampah ({bins.length})
           </h3>
           <Button size="sm" onClick={() => setBinDialog({ open: true, bin: null })} className="gap-2">
-            <Plus className="h-4 w-4" /> Add Bin
+            <Plus className="h-4 w-4" /> Tambah Tempat Sampah
           </Button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b text-left">
-                <th className="pb-3 font-medium text-muted-foreground">Code</th>
-                <th className="pb-3 font-medium text-muted-foreground">Location</th>
-                <th className="pb-3 font-medium text-muted-foreground">Device</th>
-                <th className="pb-3 font-medium text-muted-foreground">Fill</th>
-                <th className="pb-3 font-medium text-muted-foreground">Thresholds</th>
-                <th className="pb-3 font-medium text-muted-foreground text-right">Actions</th>
+                <th className="pb-3 font-medium text-muted-foreground">Kode</th>
+                <th className="pb-3 font-medium text-muted-foreground">Lokasi</th>
+                <th className="pb-3 font-medium text-muted-foreground">Perangkat</th>
+                <th className="pb-3 font-medium text-muted-foreground">Volume</th>
+                <th className="pb-3 font-medium text-muted-foreground">Batas Peringatan</th>
+                <th className="pb-3 font-medium text-muted-foreground text-right">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -168,7 +168,7 @@ export default function AdminPage() {
                 </tr>
               ))}
               {bins.length === 0 && (
-                <tr><td colSpan={6} className="py-6 text-center text-sm text-muted-foreground">No bins yet. Add one to start monitoring.</td></tr>
+                <tr><td colSpan={6} className="py-6 text-center text-sm text-muted-foreground">Belum ada tempat sampah. Tambahkan untuk mulai memantau.</td></tr>
               )}
             </tbody>
           </table>
