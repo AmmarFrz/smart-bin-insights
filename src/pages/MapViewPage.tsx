@@ -137,7 +137,6 @@ export default function MapViewPage() {
           </p>
         </div>
       ) : (
-          {/* Map Section */}
           <div className="glass-card rounded-xl overflow-hidden relative" style={{ height: "calc(100vh - 220px)", minHeight: 480 }}>
             <MapContainer center={center} zoom={13} style={{ height: "100%", width: "100%" }} scrollWheelZoom attributionControl={false}>
               <TileLayer
