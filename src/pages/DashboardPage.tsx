@@ -132,7 +132,6 @@ export default function DashboardPage() {
             <div className="flex items-center gap-2">
               <TruckIcon className="h-4 w-4 text-warning" />
               <h3 className="text-sm font-semibold">Daftar Tugas Pengambilan (Prioritas)</h3>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-warning/10 text-warning font-medium">Smart Route</span>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -165,7 +164,6 @@ export default function DashboardPage() {
           <div className="flex items-center gap-2 mb-4">
             <ShieldCheck className="h-4 w-4 text-primary" />
             <h3 className="text-sm font-semibold">Monitor Kesehatan Sensor</h3>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Deteksi Anomali</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {bins.map(bin => {
