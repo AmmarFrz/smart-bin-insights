@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useAlerts } from "@/hooks/useAlerts";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-import { useTheme } from "next-themes";
-import { Moon, Sun } from "lucide-react";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -17,7 +15,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { unreadCount } = useAlerts();
   const { user, role, signOut } = useAuth();
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
 
   const initials = (user?.user_metadata?.display_name || user?.email || "U")
     .split(" ").map((s: string) => s[0]).join("").slice(0, 2).toUpperCase();
@@ -49,16 +46,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   </Badge>
                 )}
               </Link>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-9 w-9 rounded-full bg-white/[0.04] text-muted-foreground hover:text-foreground hover:bg-white/[0.08] transition-colors"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              >
-                <Sun className="h-4.5 w-4.5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-4.5 w-4.5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                <span className="sr-only">Toggle theme</span>
-              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 rounded-full p-0 bg-gradient-to-br from-primary to-emerald-600 text-primary-foreground text-xs font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-primary/20">
