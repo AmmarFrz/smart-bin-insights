@@ -191,7 +191,7 @@ export default function MapViewPage() {
                   </Popup>
                 </Marker>
               ))}
-
+            </MapContainer>
           </div>
       )}
     </div>
